@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "877863675387",
+    "project_id": "edupyapp-pawm",
+    "storage_bucket": "edupyapp-pawm.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877863675387:android:0c8e8e63db93ab75ef975e",
+        "android_client_info": {
+          "package_name": "com.edupy.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCClUoJQigaKE0Wb_FypPQ3NKij8-FNXos"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
