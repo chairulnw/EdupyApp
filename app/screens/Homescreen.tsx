@@ -3,14 +3,14 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
-  Image,
   TouchableOpacity,
   ActivityIndicator,
   SafeAreaView,
+  ScrollView,
+  Image,
   Linking,
+  useWindowDimensions,
 } from 'react-native';
-import { Card } from 'react-native-paper';
 import Navbar from '../../components/navbar';
 import { useRouter } from 'expo-router';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
@@ -21,10 +21,14 @@ const HomeScreen = () => {
   const auth = firebase_auth;
   const db = getFirestore();
 
-  const [userData, setUserData] = useState<{ name: string; lessonsCompleted: number } | null>(
-    null
-  );
+  const [userData, setUserData] = useState<{
+    name: string;
+    lessonsCompleted: number;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const { width } = useWindowDimensions();
+  const isSmallScreen = width < 360;
 
   type Quiz = {
     id: string;
@@ -54,6 +58,27 @@ const HomeScreen = () => {
     },
   ];
 
+  const documentations = [
+    {
+      id: 'doc1',
+      title: 'Variables',
+      link: 'https://docs.python.org/3/tutorial/introduction.html#an-informal-introduction-to-python',
+      icon: require('../../assets/variable.png'),
+    },
+    {
+      id: 'doc2',
+      title: 'Conditionals',
+      link: 'https://docs.python.org/3/tutorial/controlflow.html#if-statements',
+      icon: require('../../assets/variable.png'),
+    },
+    {
+      id: 'doc3',
+      title: 'Loops',
+      link: 'https://docs.python.org/3/tutorial/controlflow.html#for-statements',
+      icon: require('../../assets/variable.png'),
+    },
+  ];
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -63,12 +88,14 @@ const HomeScreen = () => {
           const userDoc = await getDoc(userDocRef);
           if (userDoc.exists()) {
             const data = userDoc.data();
+            const totalLessons =
+              (data.bestvar === 100 ? 1 : 0) +
+              (data.bestcond === 100 ? 1 : 0) +
+              (data.bestloop === 100 ? 1 : 0);
+
             setUserData({
               name: data.name,
-              lessonsCompleted:
-                (data.bestvar === 100 ? 1 : 0) +
-                (data.bestcond === 100 ? 1 : 0) +
-                (data.bestloop === 100 ? 1 : 0),
+              lessonsCompleted: totalLessons,
             });
           }
         }
@@ -82,43 +109,10 @@ const HomeScreen = () => {
     fetchUserData();
   }, []);
 
-  const renderQuizItem = ({ item }: { item: Quiz }) => (
-    <TouchableOpacity
-      onPress={() => router.push(`../screens/Quizscreen?id=${item.id}`)}
-      style={styles.quizCardContainer}
-    >
-      <Card style={styles.quizCard}>
-        <Card.Content>
-          <Text style={styles.cardTitle}>{item.title}</Text>
-          <View style={styles.codeBlock}>
-            <Text style={styles.codeText}>
-              {item.code?.split('\n').map((line, index) => (
-                <Text key={index}>
-                  {line.split(' ').map((word, wordIndex) => {
-                    if (['if', 'for', 'in', 'range'].includes(word)) {
-                      return (
-                        <Text key={wordIndex} style={styles.blueText}>
-                          {word}{' '}
-                        </Text>
-                      );
-                    } else if (['True', '1', '2', '3', '5'].includes(word)) {
-                      return (
-                        <Text key={wordIndex} style={styles.greenText}>
-                          {word}{' '}
-                        </Text>
-                      );
-                    }
-                    return <Text key={wordIndex}>{word} </Text>;
-                  })}
-                  {'\n'}
-                </Text>
-              ))}
-            </Text>
-          </View>
-        </Card.Content>
-      </Card>
-    </TouchableOpacity>
-  );
+  const progress =
+    userData?.lessonsCompleted && userData?.lessonsCompleted > 0
+      ? Math.round((userData.lessonsCompleted / 3) * 100)
+      : 0;
 
   if (loading) {
     return (
@@ -129,165 +123,195 @@ const HomeScreen = () => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Profile Card */}
-      <View style={styles.card}>
-        <View style={styles.profileContainer}>
-          <Image
-            source={{ uri: 'https://via.placeholder.com/80' }}
-            style={styles.avatar}
-          />
-          <View style={styles.profileInfo}>
-            <Text style={styles.name}>{userData?.name || 'User'}</Text>
-            <Text style={styles.lessonStatus}>
-              Lesson Completed: {userData?.lessonsCompleted || 0}
-            </Text>
-          </View>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.welcomeText}>
+          Welcome, <Text style={styles.userName}>{userData?.name || 'User'}</Text>!
+        </Text>
+
+        <Text style={styles.sectionTitle}>Documentations</Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.documentationScroll}
+        >
+          {documentations.map((doc) => (
+            <TouchableOpacity
+              key={doc.id}
+              style={[
+                styles.documentationCard,
+                isSmallScreen ? styles.smallDocumentationCard : {},
+              ]}
+              onPress={() => Linking.openURL(doc.link)}
+            >
+              <Image
+                source={doc.icon}
+                style={[styles.icon, isSmallScreen ? { width: 24, height: 24 } : {}]}
+                resizeMode="contain"
+              />
+              <Text style={styles.cardText}>{doc.title}</Text>
+            </TouchableOpacity>
+          ))}
+          <View style={{ width: 5 }} />
+        </ScrollView>
+
+        <Text style={styles.sectionTitle}>Practices</Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.practiceScroll}
+        >
+          {quizzes.map((quiz) => (
+            <TouchableOpacity
+              key={quiz.id}
+              onPress={() => router.push(`../screens/Quizscreen?id=${quiz.id}`)}
+              style={[
+                styles.practiceCard,
+                isSmallScreen ? styles.smallPracticeCard : {},
+              ]}
+            >
+              <Text style={styles.practiceTitle}>{quiz.title}</Text>
+              <View style={styles.codeContainer}>
+                <Text style={styles.codeText}>{quiz.code}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+          <View style={{ width: 5 }} />
+        </ScrollView>
+
+        <Text style={styles.progressText}>
+          Your overall progress is <Text style={styles.progressValue}>{progress}%</Text>
+        </Text>
+        <View style={styles.progressBarContainer}>
+          <View style={[styles.progressBar, { width: `${progress}%` }]} />
         </View>
-      </View>
-
-      {/* Course Card */}
-      <TouchableOpacity
-        onPress={() => Linking.openURL('https://docs.python.org/3/')}
-        style={styles.card}
-      >
-        <View style={styles.courseContainer}>
-          <Image
-            source={{
-              uri: 'https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg',
-            }}
-            style={styles.pythonLogo}
-          />
-          <Text style={styles.courseTitle}>Programming with Python</Text>
-        </View>
-      </TouchableOpacity>
-
-      {/* Practices Section */}
-      <View style={styles.practicesSection}>
-        <Text style={styles.practicesTitle}>Practices</Text>
-        <FlatList
-          data={quizzes}
-          renderItem={renderQuizItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.quizList}
-        />
-      </View>
-
+      </ScrollView>
       <Navbar />
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#E8F1F9',
-  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#E6EEF8',
   },
-  card: {
-    backgroundColor: 'white',
-    borderRadius: 16,
-    padding: 20,
-    margin: 16,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  profileContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  avatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    borderWidth: 2,
-    borderColor: '#3498db',
-  },
-  profileInfo: {
-    marginLeft: 16,
+  safeArea: {
     flex: 1,
+    backgroundColor: '#E6EEF8',
   },
-  name: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#2c3e50',
-  },
-  lessonStatus: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    marginTop: 4,
-  },
-  courseContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#ecf0f1',
-    borderRadius: 12,
-    padding: 12,
-  },
-  pythonLogo: {
-    width: 40,
-    height: 40,
-    resizeMode: 'contain'
-  },
-  courseTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginLeft: 12,
-    color: '#2c3e50',
-  },
-  practicesSection: {
-    flex: 1,
-    paddingHorizontal: 16,
-  },
-  practicesTitle: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#2c3e50',
-    marginBottom: 16,
-    marginTop: 8,
-  },
-  quizList: {
-    paddingBottom: 16,
-  },
-  quizCardContainer: {
-    marginBottom: 16,
-  },
-  quizCard: {
-    borderRadius: 16,
-    backgroundColor: 'white',
-    elevation: 3,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2c3e50',
-    marginBottom: 12,
-  },
-  codeBlock: {
-    backgroundColor: '#f1f2f6',
+  container: {
+    flexGrow: 1,
     padding: 16,
-    borderRadius: 12,
+    backgroundColor: '#E6EEF8',
+  },
+  welcomeText: {
+    fontFamily: 'Inter',
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#293454',
+    marginBottom: 20,
+    marginTop: 20,
+    textAlign: 'center',
+  },
+  userName: {
+    fontFamily: 'Inter',
+    color: '#0F8F3F',
+  },
+  sectionTitle: {
+    fontFamily: 'Inter',
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#293454',
+    marginBottom: 10,
+  },
+  documentationScroll: {
+    marginBottom: 18,
+  },
+  documentationCard: {
+    backgroundColor: '#B3D4FF',
+    width: 145,
+    height: 90,
+    borderRadius: 10,
+    padding: 8,
+    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  smallDocumentationCard: {
+    width: 120,
+    height: 80,
+  },
+  icon: {
+    width: 32,
+    height: 32,
+    marginBottom: 3,
+  },
+  cardText: {
+    fontFamily: 'Inter',
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#293454',
+  },
+  practiceScroll: {
+    marginBottom: 15,
+  },
+  practiceCard: {
+    backgroundColor: '#476FAF',
+    width: 173,
+    height: 184,
+    borderRadius: 10,
+    padding: 10,
+    marginRight: 10,
+  },
+  smallPracticeCard: {
+    width: 150,
+    height: 160,
+  },
+  practiceTitle: {
+    fontFamily: 'Inter',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 15,
+  },
+  codeContainer: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    padding: 10,
   },
   codeText: {
-    fontFamily: 'monospace',
+    fontFamily: 'Inter',
     fontSize: 14,
+    color: '#000000',
   },
-  blueText: {
-    color: '#3498db',
+  progressText: {
+    fontFamily: 'Inter',
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#293454',
+    marginBottom: 10,
+    marginTop: 20,
   },
-  greenText: {
-    color: '#2ecc71',
+  progressValue: {
+    fontFamily: 'Inter',
+    color: '#0F8F3F',
+  },
+  progressBarContainer: {
+    backgroundColor: '#D9D9D9',
+    width: '100%',
+    height: 10,
+    borderRadius: 5,
+    overflow: 'hidden',
+    marginBottom: 200,
+    marginTop: 10,
+  },
+  progressBar: {
+    backgroundColor: '#0F8F3F',
+    height: '100%',
   },
 });
 
