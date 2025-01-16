@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import { firebase_auth } from '../../FirebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc, getFirestore } from 'firebase/firestore';
@@ -34,6 +34,7 @@ const RegisterScreen = () => {
                     bestvar: 0,
                     bestcond: 0,
                     bestloop: 0,
+                    attempt: 0,
                 });
             }
 
@@ -50,6 +51,10 @@ const RegisterScreen = () => {
         } finally {
             setLoading(false); // Matikan indikator loading
         }
+    };
+
+    const handleNavigateToLogin = () => {
+        router.push('../screens/Loginscreen'); // Navigasi ke halaman login
     };
 
     return (
@@ -82,6 +87,11 @@ const RegisterScreen = () => {
             ) : (
                 <Button title="Register" onPress={handleRegister} />
             )}
+
+            {/* Tombol untuk navigasi ke Login */}
+            <TouchableOpacity style={styles.loginLink} onPress={handleNavigateToLogin}>
+                <Text style={styles.loginText}>Already have an account? Login here</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -104,6 +114,15 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 10,
         borderRadius: 5,
+    },
+    loginLink: {
+        marginTop: 20,
+        alignItems: 'center',
+    },
+    loginText: {
+        textAlign: 'center',
+        color: '#094779',
+        fontSize: 16,
     },
 });
 

@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:877863675387:android:0c8e8e63db93ab75ef975e",
+        "mobilesdk_app_id": "1:877863675387:android:bc35b22fb6894a98ef975e",
         "android_client_info": {
-          "package_name": "com.edupy.app"
+          "package_name": "com.chairulnw.Edupy"
         }
       },
       "oauth_client": [],

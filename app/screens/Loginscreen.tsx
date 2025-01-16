@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     link: {
-        marginTop: 10,
+        marginTop: 15,
         textAlign: 'center',
         color: '#094779',
         fontSize: 16,

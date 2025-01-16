@@ -1,30 +1,66 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
-import { Card } from 'react-native-paper'; // Library untuk komponen kartu
-import { MaterialCommunityIcons } from '@expo/vector-icons'; // Library untuk ikon
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Card } from 'react-native-paper';
+import Navbar from '../../components/navbar'; // Import Navbar
 import { useRouter } from 'expo-router';
+import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import { firebase_auth } from '../../FirebaseConfig';
 
 const HomeScreen = () => {
     const router = useRouter();
+    const auth = firebase_auth;
+    const db = getFirestore();
 
-    
+    // State untuk menyimpan data pengguna
+    const [userData, setUserData] = useState<{ name: string; lessonsCompleted: number } | null>(null);
+    const [loading, setLoading] = useState(true);
+
     // Data dummy untuk daftar quiz
     type Quiz = {
         id: string;
         title: string;
         description: string;
     };
-    
+
     const quizzes: Quiz[] = [
         { id: '1', title: 'Variables', description: 'Learn about variables.' },
         { id: '2', title: 'Conditionals', description: 'Learn about conditionals.' },
         { id: '3', title: 'Loops', description: 'Learn about loops.' },
     ];
-    
 
-    // Render item quiz
+    // Ambil data pengguna dari Firestore
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const user = auth.currentUser;
+
+                if (user) {
+                    const userDocRef = doc(db, 'users', user.uid);
+                    const userDoc = await getDoc(userDocRef);
+
+                    if (userDoc.exists()) {
+                        const data = userDoc.data();
+                        setUserData({
+                            name: data.name,
+                            lessonsCompleted:
+                                (data.bestvar === 100 ? 1 : 0) +
+                                (data.bestcond === 100 ? 1 : 0) +
+                                (data.bestloop === 100 ? 1 : 0),
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
     const renderQuizItem = ({ item }: { item: Quiz }) => (
-        <TouchableOpacity onPress={() => console.log(`Selected Quiz ID: ${item.id}`)}>
+        <TouchableOpacity onPress={() => router.push(`../screens/Quizscreen?id=${item.id}`)}>
             <Card style={styles.quizCard}>
                 <Card.Title title={item.title} titleStyle={styles.cardTitle} />
                 <Card.Content>
@@ -33,7 +69,14 @@ const HomeScreen = () => {
             </Card>
         </TouchableOpacity>
     );
-    
+
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#094779" />
+            </View>
+        );
+    }
 
     return (
         <View style={styles.container}>
@@ -44,8 +87,10 @@ const HomeScreen = () => {
                     style={styles.profileImage}
                 />
                 <View style={styles.profileInfo}>
-                    <Text style={styles.profileName}>Chairul Nur Wahid</Text>
-                    <Text style={styles.profileDetails}>Lesson Completed: -</Text>
+                    <Text style={styles.profileName}>{userData?.name || 'User'}</Text>
+                    <Text style={styles.profileDetails}>
+                        Lesson Completed: {userData?.lessonsCompleted || 0}
+                    </Text>
                 </View>
             </View>
 
@@ -70,14 +115,7 @@ const HomeScreen = () => {
             </View>
 
             {/* Navbar */}
-            <View style={styles.navbar}>
-                <TouchableOpacity onPress={() => console.log('Go to Home')}>
-                    <MaterialCommunityIcons name="home" size={30} color="#094779" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push('../screens/Loginscreen')}>
-                    <MaterialCommunityIcons name="account" size={30} color="#094779" />
-                </TouchableOpacity>
-            </View>
+            <Navbar />
         </View>
     );
 };
@@ -86,6 +124,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#E8F1F9',
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     profileCard: {
         flexDirection: 'row',
@@ -156,13 +199,6 @@ const styles = StyleSheet.create({
     cardDescription: {
         fontSize: 14,
         color: '#555555',
-    },
-    navbar: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        backgroundColor: '#D9E6F2',
-        paddingVertical: 10,
     },
 });
 

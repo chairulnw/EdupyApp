@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.edupy.app</string>
+	<string>com.chairulnw.Edupy</string>
 	<key>PROJECT_ID</key>
 	<string>edupyapp-pawm</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:877863675387:ios:e968c65c04132369ef975e</string>
+	<string>1:877863675387:ios:68551bd68afe1e7eef975e</string>
 </dict>
 </plist>
