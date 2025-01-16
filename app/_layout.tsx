@@ -6,7 +6,7 @@ export default function RootLayout() {
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#094779',
+          backgroundColor: '#426CC2',
           // Opsional: jika ingin lebih tinggi
           // height: 60,
         },

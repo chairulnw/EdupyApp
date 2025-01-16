@@ -9,10 +9,10 @@ const Navbar = () => {
     return (
         <View style={styles.navbar}>
             <TouchableOpacity onPress={() => router.push('../screens/Homescreen')}>
-                <MaterialCommunityIcons name="home" size={30} color="#094779" />
+                <MaterialCommunityIcons name="home" size={30} color="#ffffff" />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => router.push('../screens/Profilescreen')}>
-                <MaterialCommunityIcons name="account" size={30} color="#094779" />
+                <MaterialCommunityIcons name="account" size={30} color="#ffffff" />
             </TouchableOpacity>
         </View>
     );
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        backgroundColor: '#D9E6F2',
+        backgroundColor: '#426CC2',
         paddingVertical: 10,
         position: 'absolute',
         bottom: 0,

@@ -69,13 +69,13 @@ const HomeScreen = () => {
       id: 'doc2',
       title: 'Conditionals',
       link: 'https://docs.python.org/3/tutorial/controlflow.html#if-statements',
-      icon: require('../../assets/variable.png'),
+      icon: require('../../assets/conditionals.png'),
     },
     {
       id: 'doc3',
       title: 'Loops',
       link: 'https://docs.python.org/3/tutorial/controlflow.html#for-statements',
-      icon: require('../../assets/variable.png'),
+      icon: require('../../assets/loops.png'),
     },
   ];
 
