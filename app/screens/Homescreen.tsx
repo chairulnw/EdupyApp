@@ -125,10 +125,23 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.welcomeText}>
-          Welcome, <Text style={styles.userName}>{userData?.name || 'User'}</Text>!
-        </Text>
+        {/* WELCOME CARD (diambil dari kode satu) */}
+        <View style={styles.welcomeCard}>
+          <Text style={styles.welcomeTextCard}>
+            Welcome, <Text style={styles.userNameCard}>{userData?.name || 'User'}</Text>!
+          </Text>
+          <View style={styles.progressContainer}>
+            <Text style={styles.progressTextCard}>
+              Overall Progress:{' '}
+              <Text style={styles.progressValueCard}>{progress}%</Text>
+            </Text>
+            <View style={styles.progressBarContainerCard}>
+              <View style={[styles.progressBarCard, { width: `${progress}%` }]} />
+            </View>
+          </View>
+        </View>
 
+        {/* DOCUMENTATIONS */}
         <Text style={styles.sectionTitle}>Documentations</Text>
         <ScrollView
           horizontal
@@ -155,6 +168,7 @@ const HomeScreen = () => {
           <View style={{ width: 5 }} />
         </ScrollView>
 
+        {/* PRACTICES */}
         <Text style={styles.sectionTitle}>Practices</Text>
         <ScrollView
           horizontal
@@ -179,12 +193,9 @@ const HomeScreen = () => {
           <View style={{ width: 5 }} />
         </ScrollView>
 
-        <Text style={styles.progressText}>
-          Your overall progress is <Text style={styles.progressValue}>{progress}%</Text>
-        </Text>
-        <View style={styles.progressBarContainer}>
-          <View style={[styles.progressBar, { width: `${progress}%` }]} />
-        </View>
+        {/* Progress di kode dua aslinya sudah ada, 
+            tapi sekarang kita pakai yang ada di welcome card.
+            Jadi, tidak ditampilkan lagi di sini. */}
       </ScrollView>
       <Navbar />
     </SafeAreaView>
@@ -192,6 +203,7 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  // STYLES DARI KODE 2 (TIDAK DIUBAH KECUALI BAGIAN CARD MENJADI RESPONSIVE)
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -207,19 +219,53 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#E8F1FA',
   },
-  welcomeText: {
-    fontFamily: 'Inter',
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: '#293454',
+
+  // Bagian "welcome card" + progress bar diambil dari KODE 1,
+  // lalu kita selaraskan penamaan style supaya tidak bentrok.
+  welcomeCard: {
+    backgroundColor: '#426BC2',
+    borderRadius: 20,
+    padding: 20,
     marginBottom: 20,
-    marginTop: 40,
+    elevation: 5,
+    // Supaya di web otomatis melebar
+    width: '100%',
+  },
+  welcomeTextCard: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginBottom: 10,
     textAlign: 'center',
   },
-  userName: {
-    fontFamily: 'Inter',
-    color: '#0F8F3F',
+  userNameCard: {
+    color: '#F5F77B',
   },
+  progressContainer: {
+    marginTop: 10,
+  },
+  progressTextCard: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    marginBottom: 5,
+  },
+  progressValueCard: {
+    color: '#F5F77B',
+  },
+  progressBarContainerCard: {
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    width: '100%',
+    height: 10,
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  progressBarCard: {
+    backgroundColor: '#F5F77B',
+    height: '100%',
+  },
+
+  // SECTION TITLE (KODE 2)
   sectionTitle: {
     fontFamily: 'Inter',
     fontSize: 24,
@@ -227,13 +273,18 @@ const styles = StyleSheet.create({
     color: '#293454',
     marginBottom: 10,
   },
+
+  // DOCUMENTATION SCROLL & CARD (KODE 2)
   documentationScroll: {
     marginBottom: 18,
   },
   documentationCard: {
     backgroundColor: '#B3D4FF',
-    width: 145,
-    height: 90,
+    // Supaya card bisa melebar di web, gunakan minWidth atau flexGrow
+    // dan hilangkan width tetap:
+    minWidth: 145,
+    minHeight: 90,
+    flexGrow: 1,
     borderRadius: 10,
     padding: 8,
     marginRight: 10,
@@ -241,9 +292,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   smallDocumentationCard: {
-    width: 120,
-    height: 80,
+    minWidth: 120,
+    minHeight: 80,
   },
+
   icon: {
     width: 32,
     height: 32,
@@ -255,20 +307,24 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#293454',
   },
+
+  // PRACTICE SCROLL & CARD (KODE 2)
   practiceScroll: {
     marginBottom: 15,
   },
   practiceCard: {
     backgroundColor: '#476FAF',
-    width: 173,
-    height: 184,
+    // Supaya card bisa melebar di web, gunakan minWidth atau flexGrow
+    minWidth: 173,
+    height: 150,
+    flexGrow: 1,
     borderRadius: 10,
     padding: 10,
     marginRight: 10,
   },
   smallPracticeCard: {
-    width: 150,
-    height: 160,
+    minWidth: 150,
+    minHeight: 160,
   },
   practiceTitle: {
     fontFamily: 'Inter',
@@ -287,31 +343,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter',
     fontSize: 14,
     color: '#000000',
-  },
-  progressText: {
-    fontFamily: 'Inter',
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#293454',
-    marginBottom: 10,
-    marginTop: 20,
-  },
-  progressValue: {
-    fontFamily: 'Inter',
-    color: '#0F8F3F',
-  },
-  progressBarContainer: {
-    backgroundColor: '#D9D9D9',
-    width: '100%',
-    height: 10,
-    borderRadius: 5,
-    overflow: 'hidden',
-    marginBottom: 200,
-    marginTop: 10,
-  },
-  progressBar: {
-    backgroundColor: '#0F8F3F',
-    height: '100%',
   },
 });
 
