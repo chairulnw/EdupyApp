@@ -200,12 +200,12 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-    backgroundColor: '#E6EEF8',
+    backgroundColor: '#E8F1FA',
   },
   container: {
     flexGrow: 1,
     padding: 16,
-    backgroundColor: '#E6EEF8',
+    backgroundColor: '#E8F1FA',
   },
   welcomeText: {
     fontFamily: 'Inter',
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#293454',
     marginBottom: 20,
-    marginTop: 20,
+    marginTop: 40,
     textAlign: 'center',
   },
   userName: {

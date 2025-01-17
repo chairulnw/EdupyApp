@@ -61,7 +61,7 @@ const ProfilePage = () => {
     if (loading) {
         return (
             <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#094779" />
+                <ActivityIndicator size="large" color="#1a237e" />
             </View>
         );
     }
@@ -78,37 +78,44 @@ const ProfilePage = () => {
         <View style={styles.container}>
             <View style={styles.profileContainer}>
                 <Image
-                    source={{ uri: 'https://via.placeholder.com/150' }}
+                    source={require('../../assets/maskot.png')}
                     style={styles.profileImage}
                 />
-                <Text style={styles.name}>{userData.name}</Text>
-                <Text style={styles.email}>{userData.email}</Text>
+                <Text style={styles.name}>{userData.name}</Text> {/* Ambil nama dari userData */}
+                <Text style={styles.email}>{userData.email}</Text> {/* Ambil email dari userData */}
             </View>
 
-            <View style={styles.statsContainer}>
-                <View style={styles.statBox}>
-                    <Text style={styles.statValue}>{userData.lessonsCompleted}</Text>
-                    <Text style={styles.statLabel}>Lessons Completed</Text>
+            <Text style={styles.sectionTitle}>My Reports</Text>
+            <View style={styles.reportContainer}>
+                <View style={styles.row}>
+                    <View style={[styles.card, styles.blueCard]}>
+                        <MaterialCommunityIcons name="account-check" size={24} color="#1a237e" />
+                        <Text style={styles.cardLabel}>Lessons Completed</Text>
+                        <Text style={styles.cardValue}>{userData.lessonsCompleted}</Text>
+                    </View>
+                    <View style={[styles.card, styles.greenCard]}>
+                        <MaterialCommunityIcons name="calendar-check" size={24} color="#1b5e20" />
+                        <Text style={styles.cardLabel}>Total Attempts</Text>
+                        <Text style={styles.totalAttemptsValue}>{userData.attempt}</Text>
+                    </View>
                 </View>
-                <View style={styles.statBox}>
-                    <Text style={styles.statValue}>{userData.attempt}</Text>
-                    <Text style={styles.statLabel}>Total Quizzes</Text>
-                </View>
-            </View>
-
-            <View style={styles.bestScoresContainer}>
-                <Text style={styles.sectionTitle}>Best Scores</Text>
-                <View style={styles.scoreBox}>
-                    <Text style={styles.quizTitle}>Variables:</Text>
-                    <Text style={styles.quizScore}>{userData.bestvar}%</Text>
-                </View>
-                <View style={styles.scoreBox}>
-                    <Text style={styles.quizTitle}>Conditionals:</Text>
-                    <Text style={styles.quizScore}>{userData.bestcond}%</Text>
-                </View>
-                <View style={styles.scoreBox}>
-                    <Text style={styles.quizTitle}>Loops:</Text>
-                    <Text style={styles.quizScore}>{userData.bestloop}%</Text>
+                <View style={[styles.card, styles.yellowCard, styles.bestScoreCard]}>
+                    <View style={styles.scoreHeader}>
+                        <MaterialCommunityIcons name="trophy" size={24} color="#426CC2" />
+                        <Text style={styles.scoreTitle}>Best Scores</Text>
+                    </View>
+                    <View style={styles.scoreRow}>
+                        <Text style={styles.scoreLabel}>Variables</Text>
+                        <View style={styles.scoreContainer}><Text style={styles.scoreValue}>{userData.bestvar}%</Text></View>
+                    </View>
+                    <View style={styles.scoreRow}>
+                        <Text style={styles.scoreLabel}>Conditionals</Text>
+                        <View style={styles.scoreContainer}><Text style={styles.scoreValue}>{userData.bestcond}%</Text></View>
+                    </View>
+                    <View style={styles.scoreRow}>
+                        <Text style={styles.scoreLabel}>Loops</Text>
+                        <View style={styles.scoreContainer}><Text style={styles.scoreValue}>{userData.bestloop}%</Text></View>
+                    </View>
                 </View>
             </View>
 
@@ -119,8 +126,7 @@ const ProfilePage = () => {
                     router.push('./Loginscreen');
                 }}
             >
-                <MaterialCommunityIcons name="logout" size={20} color="#FFFFFF" />
-                <Text style={styles.logoutText}>Logout</Text>
+                <Text style={styles.logoutText}>Log Out</Text>
             </TouchableOpacity>
 
             <Navbar />
@@ -131,7 +137,7 @@ const ProfilePage = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#E8F1F9',
+        backgroundColor: '#E8F1FA',
         padding: 20,
     },
     loadingContainer: {
@@ -141,92 +147,129 @@ const styles = StyleSheet.create({
     },
     profileContainer: {
         alignItems: 'center',
-        marginBottom: 30,
+        marginBottom: 10,
+        marginTop: 30
     },
     profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        marginBottom: 10,
+        width: 125,
+        height: 150,
     },
     name: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#094779',
-        textAlign: 'center',
+        color: '#1a237e',
+        marginBottom: 4,
     },
     email: {
-        fontSize: 14,
-        color: '#555555',
-        textAlign: 'center',
-    },
-    statsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginVertical: 20,
-    },
-    statBox: {
-        alignItems: 'center',
-        backgroundColor: '#FFFFFF',
-        padding: 15,
-        borderRadius: 10,
-        elevation: 3,
-        flex: 1,
-        marginHorizontal: 5,
-    },
-    statValue: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#094779',
-    },
-    statLabel: {
-        fontSize: 14,
-        color: '#555555',
-    },
-    bestScoresContainer: {
-        backgroundColor: '#FFFFFF',
-        padding: 15,
-        borderRadius: 10,
-        elevation: 3,
-        marginBottom: 20,
+        fontSize: 16,
+        color: '#426CC2',
+        fontWeight: 'regular'
     },
     sectionTitle: {
-        fontSize: 18,
+        fontSize: 24,
         fontWeight: 'bold',
-        color: '#094779',
-        marginBottom: 10,
+        color: '#0B1956',
+        marginBottom: 16,
     },
-    scoreBox: {
+    reportContainer: {
+        flex: 1,
+        gap: 16,
+    },
+    row: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 10,
+        gap: 16,
     },
-    quizTitle: {
-        fontSize: 16,
-        color: '#094779',
+    card: {
+        padding: 16,
+        borderRadius: 12,
+        flex: 1,
+        elevation: 2,
     },
-    quizScore: {
-        fontSize: 16,
+    blueCard: {
+        backgroundColor: '#B3D4FF',
+    },
+    greenCard: {
+        backgroundColor: '#FFFFFF',
+    },
+    yellowCard: {
+        backgroundColor: '#F5F77B',
+    },
+    bestScoreCard: {
+        width: 315,
+        height: 100,
+        marginBottom: 5
+    },
+    cardLabel: {
+        fontSize: 14,
+        color: '#0B1956',
+        marginTop: 8,
+        fontWeight: 'semibold'
+    },
+    cardValue: {
+        fontSize: 24,
         fontWeight: 'bold',
-        color: '#555555',
+        color: '#1a237e',
+        marginTop: 4,
     },
-    logoutButton: {
+    totalAttemptsValue: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#136726', // Warna hijau untuk Total Attempts
+        marginTop: 4,
+    },
+    scoreHeader: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginBottom: 16,
+        gap: 8,
+    },
+    scoreTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#426CC2',
+    },
+    scoreRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    scoreLabel: {
+        fontSize: 14,
+        color: '#426CC2',
+        fontWeight: 'semibold',
+        fontStyle: 'italic'
+    },
+    scoreContainer: {
+        backgroundColor: '#FFF',
+        width: 30,
+        height: 15,
         justifyContent: 'center',
-        backgroundColor: '#094779',
-        padding: 15,
-        borderRadius: 10,
-        marginTop: 20,
+        alignItems: 'center',
+        borderRadius: 4,
+    },
+    scoreValue: {
+        fontSize: 10,
+        fontWeight: '500',
+        color: '#426CC2',
+        fontStyle: 'italic'
+    },
+    logoutButton: {
+        backgroundColor: '#ff5252',
+        padding: 16,
+        borderRadius: 12,
+        alignItems: 'center',
+        marginBottom: 60,
+        marginTop: 8
     },
     logoutText: {
         fontSize: 16,
-        color: '#FFFFFF',
-        marginLeft: 10,
+        color: '#FFF',
+        fontWeight: 'bold',
     },
     errorText: {
         fontSize: 16,
-        color: '#FF4D4D',
+        color: '#ff5252',
         textAlign: 'center',
     },
 });
