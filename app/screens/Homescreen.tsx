@@ -125,7 +125,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        {/* WELCOME CARD */}
+        {/* WELCOME CARD (diambil dari kode satu) */}
         <View style={styles.welcomeCard}>
           <Text style={styles.welcomeTextCard}>
             Welcome, <Text style={styles.userNameCard}>{userData?.name || 'User'}</Text>!
@@ -151,7 +151,8 @@ const HomeScreen = () => {
           {documentations.map((doc) => (
             <TouchableOpacity
               key={doc.id}
-              style={[styles.documentationCard]}
+              style={[
+                styles.documentationCard ]}
               onPress={() => Linking.openURL(doc.link)}
             >
               <Image
@@ -176,7 +177,9 @@ const HomeScreen = () => {
             <TouchableOpacity
               key={quiz.id}
               onPress={() => router.push(`../screens/Quizscreen?id=${quiz.id}`)}
-              style={[styles.practiceCard]}
+              style={[
+                styles.practiceCard,
+              ]}
             >
               <Text style={styles.practiceTitle}>{quiz.title}</Text>
               <View style={styles.codeContainer}>
@@ -266,7 +269,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#B3D4FF',
     minWidth: 145,
     minHeight: 90,
-    width: '100%',
+    width:'100%',
     flexGrow: 1,
     borderRadius: 10,
     padding: 8,
@@ -295,7 +298,7 @@ const styles = StyleSheet.create({
     minWidth: 173,
     height: 150,
     flexGrow: 1,
-    width: '100%',
+    width:'100%',
     borderRadius: 10,
     padding: 10,
     marginRight: 10,
@@ -312,14 +315,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
     padding: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   codeText: {
     fontFamily: 'Inter',
     fontSize: 14,
     color: '#000000',
-    textAlign: 'center',
   },
 });
 
