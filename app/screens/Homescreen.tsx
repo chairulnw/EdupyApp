@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#E6EEF8',
+    backgroundColor: '#E8F1FA',
   },
   safeArea: {
     flex: 1,
