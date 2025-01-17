@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Animated, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Animated } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import Modal from 'react-native-modal';
 import { getFirestore, doc, updateDoc, getDoc } from 'firebase/firestore';
@@ -85,7 +85,6 @@ const QuizScreen = () => {
         }
     };
 
-    // Existing backend functions remain unchanged
     const updateUserStats = async () => {
         try {
             const user = auth.currentUser;
@@ -234,6 +233,12 @@ const QuizScreen = () => {
                     <Text style={styles.questionText}>
                         {questions[currentQuestion].question}
                     </Text>
+
+                    {/* Tampilkan kode dalam codeblock */}
+                    <Text style={styles.codeBlock}>
+                        {questions[currentQuestion].code}
+                    </Text>
+
                     <View style={styles.optionsContainer}>
                         {questions[currentQuestion].options.map((option, index) => (
                             <TouchableOpacity
@@ -381,10 +386,10 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     questionText: {
-        fontSize: 12,
+        fontSize: 16,
         fontWeight: 'regular',
         color: '#1a237e',
-        marginBottom: 24,
+        marginBottom: 5,
         lineHeight: 28,
     },
     optionsContainer: {
@@ -561,7 +566,20 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
     },
+    codeBlock: {
+        backgroundColor: '#F5F5F5',
+        borderRadius: 8,
+        padding: 12,
+        marginBottom: 16,
+        fontFamily: 'monospace', // Gunakan font monospace untuk kode
+        fontSize: 14,
+        color: '#333',
+        elevation: 2,  // Memberikan efek bayangan ringan
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+    },
 });
 
 export default QuizScreen;
-
