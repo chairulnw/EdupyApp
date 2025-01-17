@@ -125,7 +125,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.container}>
-        {/* WELCOME CARD (diambil dari kode satu) */}
+        {/* WELCOME CARD */}
         <View style={styles.welcomeCard}>
           <Text style={styles.welcomeTextCard}>
             Welcome, <Text style={styles.userNameCard}>{userData?.name || 'User'}</Text>!
@@ -151,10 +151,7 @@ const HomeScreen = () => {
           {documentations.map((doc) => (
             <TouchableOpacity
               key={doc.id}
-              style={[
-                styles.documentationCard,
-                isSmallScreen ? styles.smallDocumentationCard : {},
-              ]}
+              style={[styles.documentationCard]}
               onPress={() => Linking.openURL(doc.link)}
             >
               <Image
@@ -179,10 +176,7 @@ const HomeScreen = () => {
             <TouchableOpacity
               key={quiz.id}
               onPress={() => router.push(`../screens/Quizscreen?id=${quiz.id}`)}
-              style={[
-                styles.practiceCard,
-                isSmallScreen ? styles.smallPracticeCard : {},
-              ]}
+              style={[styles.practiceCard]}
             >
               <Text style={styles.practiceTitle}>{quiz.title}</Text>
               <View style={styles.codeContainer}>
@@ -192,10 +186,6 @@ const HomeScreen = () => {
           ))}
           <View style={{ width: 5 }} />
         </ScrollView>
-
-        {/* Progress di kode dua aslinya sudah ada, 
-            tapi sekarang kita pakai yang ada di welcome card.
-            Jadi, tidak ditampilkan lagi di sini. */}
       </ScrollView>
       <Navbar />
     </SafeAreaView>
@@ -203,7 +193,6 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  // STYLES DARI KODE 2 (TIDAK DIUBAH KECUALI BAGIAN CARD MENJADI RESPONSIVE)
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -220,15 +209,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#E8F1FA',
   },
 
-  // Bagian "welcome card" + progress bar diambil dari KODE 1,
-  // lalu kita selaraskan penamaan style supaya tidak bentrok.
   welcomeCard: {
     backgroundColor: '#426BC2',
     borderRadius: 20,
     padding: 20,
     marginBottom: 20,
     elevation: 5,
-    // Supaya di web otomatis melebar
     width: '100%',
   },
   welcomeTextCard: {
@@ -265,7 +251,6 @@ const styles = StyleSheet.create({
     height: '100%',
   },
 
-  // SECTION TITLE (KODE 2)
   sectionTitle: {
     fontFamily: 'Inter',
     fontSize: 24,
@@ -274,26 +259,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
-  // DOCUMENTATION SCROLL & CARD (KODE 2)
   documentationScroll: {
     marginBottom: 18,
   },
   documentationCard: {
     backgroundColor: '#B3D4FF',
-    // Supaya card bisa melebar di web, gunakan minWidth atau flexGrow
-    // dan hilangkan width tetap:
     minWidth: 145,
     minHeight: 90,
+    width: '100%',
     flexGrow: 1,
     borderRadius: 10,
     padding: 8,
     marginRight: 10,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  smallDocumentationCard: {
-    minWidth: 120,
-    minHeight: 80,
   },
 
   icon: {
@@ -308,23 +287,18 @@ const styles = StyleSheet.create({
     color: '#293454',
   },
 
-  // PRACTICE SCROLL & CARD (KODE 2)
   practiceScroll: {
     marginBottom: 15,
   },
   practiceCard: {
     backgroundColor: '#476FAF',
-    // Supaya card bisa melebar di web, gunakan minWidth atau flexGrow
     minWidth: 173,
     height: 150,
     flexGrow: 1,
+    width: '100%',
     borderRadius: 10,
     padding: 10,
     marginRight: 10,
-  },
-  smallPracticeCard: {
-    minWidth: 150,
-    minHeight: 160,
   },
   practiceTitle: {
     fontFamily: 'Inter',
@@ -338,11 +312,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 8,
     padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   codeText: {
     fontFamily: 'Inter',
     fontSize: 14,
     color: '#000000',
+    textAlign: 'center',
   },
 });
 

@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     bestScoreCard: {
         // Gantikan width: 315, height: 100, agar responsif
         width: '100%',
-        minHeight: 100,
+        maxHeight: 150,
         marginBottom: 5,
     },
 
