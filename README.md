@@ -5,7 +5,7 @@ Edupy adalah aplikasi yang membantu pemula untuk belajar python
 ## Get started
 
 1. Mobile
-install apk Edupy melalui link ini [Edupy](drive.google.com/ucexport=downloadid=1a0MrimVPUCdBTo5dQ1llEeZxbybumQHk)
+install apk Edupy melalui link ini [Edupy](https://drive.usercontent.google.com/download?id=1a0MrimVPUCdBTo5dQ1llEeZxbybumQHk&export=download&authuser=0)
 
 2. Web
 dapat langsung diakses melalui link https://edupy.expo.app/
